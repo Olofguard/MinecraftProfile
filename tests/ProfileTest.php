@@ -19,12 +19,13 @@ class Tests extends PHPUnit_Framework_TestCase
     {
         $this->mojangBuster();
         $profile = Profile::fromUuid('bd95beec116b4d37826c373049d3538b', $this->getClient());
+
         $this->asserts($profile);
     }
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Invalid Username (Nav"arr)
+     * @expectedExceptionMessage Bad JSON from API: on username Nav"arr
      */
     public function testBadUsername()
     {
@@ -36,8 +37,8 @@ class Tests extends PHPUnit_Framework_TestCase
         $this->assertEquals('bd95beec116b4d37826c373049d3538b', $profile->uuid);
         $this->assertEquals('Navarr', $profile->name);
         $this->assertTrue($profile->public);
-        $this->assertEquals('http://textures.minecraft.net/texture/95a2d2d94942966f743b84e4c262631978253979db673c2fbcc27dc3d2dcc7a7', $profile->capeUrl);
-        $this->assertEquals('http://textures.minecraft.net/texture/5112ebb7f5d7bdc5b57532af14408fbb757692ad81cc717e4c1faecdb9e3a2b5', $profile->skinUrl);
+        $this->assertTrue(strpos($profile->capeUrl, 'http://textures.minecraft.net/texture/') !== false);
+        $this->assertTrue(strpos($profile->skinUrl, 'http://textures.minecraft.net/texture/') !== false);
     }
 
     /* To Prevent 429 */
